@@ -18,18 +18,74 @@ Transform the cleaned data set into a tidy data set that shows averages per subj
 **run_analysis.R**: Script to collect, clean and summarize data as prescribed\
 **tidydataset.txt**: The resulting tidy data set with averages for all mean() and std() variables per subject per activity\
 
-# Source files :
+# Data processing
 
-**activity_labels.txt**: The integer to activity mapping for the six activities(WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) that each subject performed\
+## Collection of the raw data
+
+The following raw data files were downloaded from the study link into folders as shown:\
+
+.\getdata\_projectfiles_UCI HAR Dataset\UCI HAR Dataset:\
+**activity_labels.txt**: The integer to activity mapping for the six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) that each subject performed\
 **features.txt**: List of all 561 features in X_train and X_test\
 
-**subject_train.txt**: An integer representing the subject who performed the activity for each of the 7352 observations in the training data set.There are 21 subjects in the training data set\
+.\getdata\_projectfiles_UCI HAR Dataset\UCI HAR Dataset\train:\
+**subject_train.txt**: An integer representing the subject who performed the activity for each observation of the 7352 observations in the training data set. There are 21 subjects in the training data set.\
 **X_train.txt**: The 561 variables for 7352 observations in the training data set\
-**y_train.txt**: An integer label for each observation in the training data. The number can be looked up in activity_labels.txt to get the corresponding activity (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)\
+**y_train.txt**: An integer label for each observation in the training data. The number can be looked up in activity_labels.txt to get the corresponding activity ((WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)\
 
-**subject_test.txt**: An integer representing the subject who performed the activity for each observation of the 2947 observations in the Test dataset There are 9 subjects in the test data set\
+.\getdata\_projectfiles_UCI HAR Dataset\UCI HAR Dataset\test:\
+**subject_test.txt**: An integer representing the subject who performed the activity for each observation of the 2947 observations in the Test data set. There are 9 subjects in the test data set\
 **X_test.txt**: The 561 variables for 2947 observations in the test data set\
-**y_test.txt**: An integer label for each observation in the test data. The number can be looked up in activity_labels.txt to get the corresponding activity (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
+**y_test.txt**: An integer label for each observation in the test data. The number can be looked up in activity_labels.txt to get the corresponding activity ((WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
+
+## Processing of the raw data
+
+### Programming Assignment instructions:
+
+Download data from the above link\
+Merge training and test set\
+Extract the mean() and Std() measurements/variables/columns. (Subset the columns to keep only these variables)\
+Add descriptive activity column to label activity(WALKING ,WALKING_UPSTAIRS ,WALKING_DOWNSTAIRS ,SITTING ,STANDING ,LAYING )\
+Add column names to label this subset of the data with descriptive variable names
+
+### Steps in run_analysis.R to accomplish the above instructions:
+
+Read the data (downloaded from the above link) into R with read.table commands\
+Name columns with descriptive names: Use naming convention provided in features.txt for X_train and X_test, but remove dashes, full stops,commas to make more readable. Keep abbreviations, for example acc=acceleration(further explanations below), to avoid descriptions that are too long\
+For train data: Combine Subject, Train , Activity columns\
+For test data: Combine Subject, Test , Activity columns\
+Add activity description by merging with activity labels (Note that this may reorder rows)\
+Combine Train and test rows\
+Subset the columns so that only the subject, activity and columns with mean() and std() in column names remain\
+Write to cleaned data set. Dimensions:10 299 rows, 68 columns\
+
+# Creating the tidy data file
+
+## Programming Assignment instructions:
+
+Use the cleaned data set to build a tidy data set that contains average of each variable for each activity and each subject
+
+## Steps in run_analysis.R to build tidy data set as per instruction
+
+Instruction: Use the cleaned data set to build a tidy data set that contains: average of each variable for each activity and each subject\
+Remove brackets from names to be able to use the colmeans function to average the fields\
+Choose columns to avg, namely all the columns that contain the words mean or std\
+Group cleaned data set by subject and activity\
+Use colMeans in a sapply to average the columns. Transpose result into data frame\
+Rownames will be in the format subject.activity, add subject.activity as first column of new data frame containing the averaged data\
+Split subject and activity into 2 columns\
+Write tidy data set to table tidydataset\
+The tidy data set can be read using:\
+tidyresult\<-read.table("./tidydataset.txt", header = TRUE)\
+head(tidyresult)\
+
+## Summary of data tranformations:
+
+Source tables: activity_labels.txt,features.txt,subject_train.txt,X_train.txt,y_train.txt,subject_test.txt,X_test.txt,y_test.txt\
+Cleaned data set variables: subject,activity, all mean() and std() variables, including magnitude mean and magnitude std variables\
+Tidy data set: average the mean and std per subject and activity of Acc,gravityAcc, AccJerk,Gyro, GyroJerk variables from time and frequency domains in 3 axial directions, as well as the average of the magnitudes\
+Transformation/Summary type: Average per subject per activity\
+Filter: no filter\
 
 # Information from the original study design
 
